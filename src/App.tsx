@@ -19,6 +19,7 @@ import Technology from "./Components/Technology";
 import Account from "./Components/Account";
 import Notifications from "./Components/Notifications";
 import "./App.css";
+import PostContent from "./Components/PostContent";
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
           <Route path="/technology" element={<Technology />} />
           <Route path="/notification" element={<Notifications />} />
           <Route path="/account" element={<Account />} />
+          <Route path="/feeds/postcontent" element={<PostContent />} />
         </Routes>
       </BrowserRouter>
     </>

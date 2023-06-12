@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SideBar from "./SideBar";
 import profile from "./feedprofile.png";
 import fYou from "./forYou.png";
@@ -14,6 +14,9 @@ function Feeds() {
   const [featured, setFeatured] = useState(false);
   const [recent, setRecent] = useState(false);
 
+  useEffect(() => {
+    setForYou(true);
+  }, []);
   function handleForYou() {
     setForYou(!forYou);
     setFeatured(false);
@@ -66,7 +69,7 @@ function Feeds() {
                 <p className=" text-[18px] text-[#626262] mt-[5px] font-[400] ">Explore different content you’d love </p>
               </div>
               <div>
-                <Link onClick={() => window.scrollTo(0, 0)} className=" mb-[30px]" to="">
+                <Link onClick={() => window.scrollTo(0, 0)} className=" mb-[30px]" to="/feeds/postcontent">
                   <div className=" text-[#fff] text-[16px] flex justify-evenly font-[600] pt-[12px] bg-[#543EE0] rounded-[8px] w-[177px] h-[56px] text-center ">
                     <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M2.66211 22.2499H6.90461L22.4611 6.69343L18.2181 2.45093L2.66211 18.0074V22.2499Z" stroke="white" stroke-width="4" stroke-linejoin="round" />
@@ -292,6 +295,8 @@ function Feeds() {
                   </div>
                 </div>
               )}
+              {/* {featured === true && <div></div>}
+              {recent === true && <div></div>} */}
             </div>
           </div>
         </div>

@@ -1,16 +1,20 @@
 import { Link, NavLink } from "react-router-dom";
-// import { useState } from "react";
+import { useState } from "react";
 
 function SideBar({ children }: any) {
-  //   const [overview, setOverview] = useState(false);
-  //   const [trending, setTrending] = useState(false);
+  const [overview, setOverview] = useState(false);
+  const [trending, setTrending] = useState(false);
+  const [person, setPersonal] = useState(false);
 
-  //   function handleOverview() {
-  //     setOverview(!overview);
-  //   }
-  //   function handleTrending() {
-  //     setTrending(!trending);
-  //   }
+  function handleOverview() {
+    setOverview(!overview);
+  }
+  function handleTrending() {
+    setTrending(!trending);
+  }
+  function handlePersonal() {
+    setPersonal(!person);
+  }
 
   const listItem = [
     {
@@ -136,27 +140,30 @@ function SideBar({ children }: any) {
           </div>
         </Link>
         <div className=" mt-[24px]  ">
-          <h1 className=" text-[18px] text-[#111111] font-[500] ml-[30px] cursor-pointer "> Overview</h1>
-          {/* {overview && ( */}
-          <div className=" mt-[33px] h-[35vh]">
-            {listItem.map((item, index) => (
-              <NavLink
-                onClick={() => window.scrollTo(0, 0)}
-                className={({ isActive }) =>
-                  isActive ? "flex w-[150px] text-[#543EE0] text-left  text-[16px] ml-[20px] mb-[20px] items-center justify-between" : "flex items-center  ml-[20px] mb-[20px] text-left  w-[150px] text-[#626262] text-[16px]  justify-between"
-                }
-                to={item.path}
-                key={index}
-              >
-                <div className="">{item.icon}</div>
-                <h2 className="text-left w-[100px]">{item.name}</h2>
-              </NavLink>
-            ))}
-          </div>
-          {/* )} */}
+          <h1 onClick={handleOverview} className=" text-[18px] text-[#111111] font-[500] ml-[30px] cursor-pointer ">
+            {" "}
+            Overview
+          </h1>
+          {overview === false && (
+            <div className=" mt-[33px] h-[35vh]">
+              {listItem.map((item, index) => (
+                <NavLink
+                  onClick={() => window.scrollTo(0, 0)}
+                  className={({ isActive }) =>
+                    isActive ? "flex w-[150px] text-[#543EE0] text-left  text-[16px] ml-[20px] mb-[20px] items-center justify-between" : "flex items-center  ml-[20px] mb-[20px] text-left  w-[150px] text-[#626262] text-[16px]  justify-between"
+                  }
+                  to={item.path}
+                  key={index}
+                >
+                  <div className="">{item.icon}</div>
+                  <h2 className="text-left w-[100px]">{item.name}</h2>
+                </NavLink>
+              ))}
+            </div>
+          )}
         </div>
         <div className=" mt-[24px]  ">
-          <h1 className=" text-[18px] flex w-[150px] justify-between items-center text-[#111111] font-[500] ml-[20px] cursor-pointer ">
+          <h1 onClick={handleTrending} className=" text-[18px] flex w-[150px] justify-between items-center text-[#111111] font-[500] ml-[20px] cursor-pointer ">
             {" "}
             Trending Tags
             <svg width="20" height="13" viewBox="0 0 20 13" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -166,47 +173,50 @@ function SideBar({ children }: any) {
               />
             </svg>
           </h1>
-          {/* {trending && ( */}
-          <div className=" mt-[33px] h-[35vh]">
-            {trendingTags.map((trend, index) => (
-              <NavLink
-                onClick={() => window.scrollTo(0, 0)}
-                className={({ isActive }) =>
-                  isActive ? "flex w-[150px] text-[#543EE0] text-left  text-[16px] ml-[20px] mb-[20px] items-center justify-between" : "flex items-center  ml-[20px] mb-[20px] text-left  w-[150px] text-[#626262] text-[16px]  justify-between"
-                }
-                to={trend.path}
-                key={index}
-              >
-                <h2 className="">{trend.name}</h2>
-              </NavLink>
-            ))}
-          </div>
-          {/* )} */}
+          {trending === false && (
+            <div className=" mt-[33px] h-[35vh]">
+              {trendingTags.map((trend, index) => (
+                <NavLink
+                  onClick={() => window.scrollTo(0, 0)}
+                  className={({ isActive }) =>
+                    isActive ? "flex w-[150px] text-[#543EE0] text-left  text-[16px] ml-[20px] mb-[20px] items-center justify-between" : "flex items-center  ml-[20px] mb-[20px] text-left  w-[150px] text-[#626262] text-[16px]  justify-between"
+                  }
+                  to={trend.path}
+                  key={index}
+                >
+                  <h2 className="">{trend.name}</h2>
+                </NavLink>
+              ))}
+            </div>
+          )}
         </div>
         <div className=" mt-[24px]  ">
-          <h1 className=" text-[18px] text-[#111111] font-[500] ml-[25px] cursor-pointer "> Personal</h1>
+          <h1 onClick={handlePersonal} className=" text-[18px] text-[#111111] font-[500] ml-[25px] cursor-pointer ">
+            {" "}
+            Personal
+          </h1>
 
-          {/* {trending && ( */}
-          <div className=" mt-[33px] h-[30vh]">
-            {personal.map((trend, index) => (
-              <NavLink
-                onClick={() => window.scrollTo(0, 0)}
-                className={({ isActive }) =>
-                  isActive ? "flex w-[150px] text-[#543EE0] text-left  text-[16px] ml-[20px] mb-[20px] items-center justify-between" : "flex items-center  ml-[20px] mb-[20px] text-left  w-[150px] text-[#626262] text-[16px]  justify-between"
-                }
-                to={trend.path}
-                key={index}
-              >
-                <div>{trend.icon}</div>
-                <h2 className="text-left w-[100px]">{trend.name}</h2>
-              </NavLink>
-            ))}
-            <br />
-            <Link to="/login">
-              <h1 className=" text-[18px] text-[#FF1400] font-[500] ml-[30px] cursor-pointer "> Log out</h1>
-            </Link>
-          </div>
-          {/* )} */}
+          {person === false && (
+            <div className=" mt-[33px] h-[15vh]">
+              {personal.map((trend, index) => (
+                <NavLink
+                  onClick={() => window.scrollTo(0, 0)}
+                  className={({ isActive }) =>
+                    isActive ? "flex w-[150px] text-[#543EE0] text-left  text-[16px] ml-[20px] mb-[20px] items-center justify-between" : "flex items-center  ml-[20px] mb-[20px] text-left  w-[150px] text-[#626262] text-[16px]  justify-between"
+                  }
+                  to={trend.path}
+                  key={index}
+                >
+                  <div>{trend.icon}</div>
+                  <h2 className="text-left w-[100px]">{trend.name}</h2>
+                </NavLink>
+              ))}
+              <br />
+            </div>
+          )}
+          <Link to="/login">
+            <h1 className=" text-[18px] mt-[20px] h-[10vh] text-[#FF1400] font-[500] ml-[30px] cursor-pointer "> Log out</h1>
+          </Link>
         </div>
       </div>
       <main>{children}</main>
