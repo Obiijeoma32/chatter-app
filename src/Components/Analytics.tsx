@@ -1,11 +1,15 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SideBar from "./SideBar";
 import profile from "./feedprofile.png";
 import fYou from "./forYou.png";
 
 function Analytics() {
   const [postActivity, setPostActivity] = useState(false);
+
+  useEffect(() => {
+    setPostActivity(true);
+  }, []);
   function handlePostactivity() {
     setPostActivity(!postActivity);
   }

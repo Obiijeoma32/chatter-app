@@ -1,11 +1,29 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 
 function Header() {
   const [hamBurgerMenu, setHamBurgerMenu] = useState<boolean>(false);
+
   function handleHamBurgerMenu() {
     setHamBurgerMenu(!hamBurgerMenu);
   }
+  const closeDropdown = () => {
+    setHamBurgerMenu(false);
+  };
+  const handleScroll = useCallback(() => {
+    if (hamBurgerMenu) {
+      closeDropdown();
+    }
+    return hamBurgerMenu;
+  }, [hamBurgerMenu]);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [hamBurgerMenu, handleScroll]);
 
   return (
     <>
@@ -41,11 +59,11 @@ function Header() {
           </div>
         </div>
         <div className=" 3xxl:block 1halfxl:hidden w-[25%] pt-[45px] ">
-          <svg onClick={handleHamBurgerMenu} className=" opacity-80 ml-[50px] text-[#111111]  " width="35" height="30" viewBox="0 0 45 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg onScroll={() => setHamBurgerMenu(false)} onClick={handleHamBurgerMenu} className=" opacity-80 ml-[50px] text-[#111111]  " width="35" height="30" viewBox="0 0 45 30" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M2.5 27.5H42.5M2.5 15H42.5M2.5 2.5H42.5" stroke="currentColor" strokeWidth="3.75" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
           {hamBurgerMenu && (
-            <div className="grid w-[350px] mt-[10px]  bg-[#fafafa] bg-opacity-90 z-10 text-left pl-[5px] rounded-[5px] h-[260px] ">
+            <div className="grid w-[140px] ml-[-35px] mt-[10px]  bg-[#fafafa] bg-opacity-90 z-10 text-left pl-[15px] pt-[10px] rounded-[5px] h-[260px] ">
               <div className="">
                 <Link className="  hover:underline " onClick={() => window.scrollTo(0, 0)} to="/home">
                   <div className=" text-[18px] m-[11px] text-[#111111] font-[600] ">Home</div>

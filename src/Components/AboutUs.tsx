@@ -39,7 +39,7 @@ function AboutUs() {
             great ideas with people{" "}
           </p>{" "}
         </div>
-        <div className="  grid ml-[20%] h-[150vh] justify-between items-center ">
+        <div className="  grid ml-[17%] w-[85%] h-[150vh] justify-between items-center ">
           <div className=" w-[306px] pt-[15px] pl-[18px] text-left border-[1px] border-[#D0D0D0] h-[324px] ">
             <svg width="92" height="88" viewBox="0 0 92 88" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M34 30H32V56C32 56.5304 32.2107 57.0391 32.5858 57.4142C32.9609 57.7893 33.4696 58 34 58H60V56H34V30Z" fill="black" />

@@ -24,7 +24,7 @@ function Home() {
         <AboutUs />
         {/* small screen */}
         <div className=" 3xxl:block 10inch:hidden w-[100%] h-[722px] bg-[#FFEDCC] pt-[93px] bg-opacity-50 ">
-          <div className="grid items-center ml-[30px] justify-between w-[90%] ">
+          <div className="grid items-center ml-[40px] justify-between w-[90%] ">
             <div className=" mb-[30px] w-[40%]">
               {" "}
               <img className=" rounded-[50%] " src={Fr} alt="Frontend Engineer" />
@@ -68,7 +68,7 @@ function Home() {
         </div>
         {/* small screens */}
         <div className=" 10inch:hidden w-[90%] mt-[4%] 3xxl:grid  items-center justify-between  h-[992px]">
-          <div className="ml-[30px]">
+          <div className="ml-[40px]">
             <div className="w-[70%] ml-[15%] mb-[20px] ">
               {" "}
               <img src={GreatMind} alt="great minds" />
