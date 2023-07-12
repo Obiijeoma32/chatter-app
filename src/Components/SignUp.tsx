@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import { useGoogleLogin } from "@react-oauth/google";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import Select from "react-select";
+// import Select from "react-select";
 import SignUpAndLogin from "./SignUpAndLogin";
 import GooglePng from "./google.png";
 import LinkedinPic from "./linkedPic.png";
@@ -10,8 +10,68 @@ import LinkedinPic from "./linkedPic.png";
 function SignUp() {
   const [confirmPassword, setConfirmPassword] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [fName, setFName] = useState("");
+  const [lName, setLName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [occupation, setOccupation] = useState("");
   const [user, setUser] = useState<any>();
   const [profile, setProfile] = useState([]);
+  const navigate = useNavigate();
+
+  function handleFName(event: ChangeEvent<HTMLInputElement>) {
+    setFName(event.target.value);
+  }
+  function handleLName(event: ChangeEvent<HTMLInputElement>) {
+    setLName(event.target.value);
+  }
+  function handleEmail(event: ChangeEvent<HTMLInputElement>) {
+    setEmail(event.target.value);
+  }
+  function handlePassword(event: ChangeEvent<HTMLInputElement>) {
+    setPassword(event.target.value);
+  }
+  function handleOccupation(event: ChangeEvent<HTMLInputElement>) {
+    setOccupation(event.target.value);
+  }
+  const handleSendClick = async () => {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: 200,
+        firstName: fName,
+        lastName: lName,
+        occupation: occupation,
+        email: email,
+        password: password,
+      }),
+    };
+
+    console.log(requestOptions);
+    // setLoading(true); // start progress spinner
+    fetch("http://nubeero-deployment-server.uksouth.cloudapp.azure.com:9909/api/user/signUp", requestOptions)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        console.log(data.id);
+
+        if (data.id !== null) {
+          localStorage.setItem("userId", data.id); // Save the id to localStorage
+
+          // const redirectUrl = `/resourcedetails`;
+
+          navigate("/feeds");
+
+          // window.location.href = redirectUrl; // Redirect to "/resourcedetails" page
+          // setLinkTo(redirectUrl);
+          console.log("this should go to the next page");
+        }
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
 
   const loginGoog = useGoogleLogin({
     onSuccess: (codeResponse: any) => {
@@ -37,10 +97,12 @@ function SignUp() {
     }
   }, [user]);
 
-  const options = [
-    { value: "writer", label: "Writer" },
-    { value: "reader", label: "Reader" },
-  ];
+  // const options = [
+  //   { value: "writer", label: "Writer" },
+  //   { value: "reader", label: "Reader" },
+  // ];
+  // const optionValues = options.map((option) => option.value);
+  // const receivingVariable: string[] = optionValues;
 
   return (
     <>
@@ -62,7 +124,13 @@ function SignUp() {
                     </label>
                     <br />
 
-                    <input className="w-[230px] mt-[12px] pl-[15px] outline-none text-[16px] placeholder:text-[#212529] text-[#212529] rounded-[8px] h-[56px] border-[1px] border-[#CED4DA] " type="name" placeholder="John" />
+                    <input
+                      onChange={handleFName}
+                      value={fName}
+                      className=" md:w-[230px] mt-[12px] pl-[15px] outline-none text-[16px] placeholder:text-[#212529] text-[#212529] rounded-[8px] h-[56px] border-[1px] border-[#CED4DA] "
+                      type="name"
+                      placeholder="John"
+                    />
                     <br />
                   </div>
                   <div className="w-[50%]">
@@ -71,7 +139,13 @@ function SignUp() {
                     </label>
                     <br />
 
-                    <input className="w-[230px] mt-[12px] pl-[15px] outline-none text-[16px] placeholder:text-[#212529] text-[#212529] rounded-[8px] h-[56px] border-[1px] border-[#CED4DA] " type="name" placeholder="Doe" />
+                    <input
+                      onChange={handleLName}
+                      value={lName}
+                      className=" md:w-[230px] mt-[12px] pl-[15px] outline-none text-[16px] placeholder:text-[#212529] text-[#212529] rounded-[8px] h-[56px] border-[1px] border-[#CED4DA] "
+                      type="name"
+                      placeholder="Doe"
+                    />
                   </div>
                 </div>
                 <br />
@@ -79,26 +153,20 @@ function SignUp() {
                   You are joining as?
                 </label>
                 <br />
-                <Select
-                  styles={{
-                    control: (baseStyles, state) => ({
-                      ...baseStyles,
-                      borderColor: state.isFocused ? "#CED4DA" : "#CED4DA",
-                      height: "56px",
-                      text: "16px",
-                      borderRadius: "8px",
-                    }),
-                  }}
-                  className="w-[106%] mt-[12px]  outline-none text-[16px] placeholder:text-[#212529] text-[#212529] rounded-[8px]    "
-                  options={options}
-                />
+                <input onChange={handleOccupation} value={occupation} placeholder="e.g Reader" type="text" className="w-[106%] mt-[12px]  outline-none text-[16px] placeholder:text-[#212529] text-[#212529] rounded-[8px" />
                 <br />
                 <label className=" font-[400] text-[16px] text-[#3B3B3B] " htmlFor="email">
                   Email address
                 </label>
                 <br />
 
-                <input className="w-[106%] mt-[12px] mb-[24px] pl-[15px] outline-none text-[16px] placeholder:text-[#212529] text-[#212529] rounded-[8px] h-[56px] border-[1px] border-[#CED4DA] " type="email" placeholder="Johndoe@gmail.com" />
+                <input
+                  onChange={handleEmail}
+                  value={email}
+                  className="w-[106%] mt-[12px] mb-[24px] pl-[15px] outline-none text-[16px] placeholder:text-[#212529] text-[#212529] rounded-[8px] h-[56px] border-[1px] border-[#CED4DA] "
+                  type="email"
+                  placeholder="Johndoe@gmail.com"
+                />
                 <br />
 
                 <label className=" font-[400] text-[16px] text-[#3B3B3B] " htmlFor="email">
@@ -130,7 +198,13 @@ function SignUp() {
                 </label>
                 <br />
                 <div className="w-[106%] flex mt-[12px] justify-between items-center  pr-[15px] rounded-[8px] h-[56px] border-[1px] border-[#CED4DA]">
-                  <input className=" pl-[15px]  outline-none w-[95%] h-[45px] text-[16px] placeholder:text-[#212529] text-[#212529] " type={confirmPassword === true ? "text" : "password"} placeholder="********" />
+                  <input
+                    onChange={handlePassword}
+                    value={password}
+                    className=" pl-[15px]  outline-none w-[95%] h-[45px] text-[16px] placeholder:text-[#212529] text-[#212529] "
+                    type={confirmPassword === true ? "text" : "password"}
+                    placeholder="********"
+                  />
                   <button onClick={() => setConfirmPassword((open) => !open)} type="button">
                     {confirmPassword === true ? (
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -149,7 +223,7 @@ function SignUp() {
                 </div>
                 <br />
                 <br />
-                <Link onClick={() => window.scrollTo(0, 0)} className=" " to="/otp">
+                <Link onClick={handleSendClick} className=" " to="">
                   <div className=" text-[#fff] text-[18px] font-[600] pt-[12px] bg-[#543EE0] rounded-[8px] w-[106%] h-[56px] text-center ">Create account</div>
                 </Link>
                 <br />
@@ -188,7 +262,13 @@ function SignUp() {
                     </label>
                     <br />
 
-                    <input className="w-[230px] mt-[12px] pl-[15px] outline-none text-[16px] placeholder:text-[#212529] text-[#212529] rounded-[8px] h-[56px] border-[1px] border-[#CED4DA] " type="name" placeholder="John" />
+                    <input
+                      onChange={handleFName}
+                      value={fName}
+                      className="w-[230px] mt-[12px] pl-[15px] outline-none text-[16px] placeholder:text-[#212529] text-[#212529] rounded-[8px] h-[56px] border-[1px] border-[#CED4DA] "
+                      type="name"
+                      placeholder="John"
+                    />
                     <br />
                   </div>
                   <div className="w-[50%]">
@@ -197,7 +277,13 @@ function SignUp() {
                     </label>
                     <br />
 
-                    <input className="w-[230px] mt-[12px] pl-[15px] outline-none text-[16px] placeholder:text-[#212529] text-[#212529] rounded-[8px] h-[56px] border-[1px] border-[#CED4DA] " type="name" placeholder="Doe" />
+                    <input
+                      onChange={handleLName}
+                      value={lName}
+                      className="w-[230px] mt-[12px] pl-[15px] outline-none text-[16px] placeholder:text-[#212529] text-[#212529] rounded-[8px] h-[56px] border-[1px] border-[#CED4DA] "
+                      type="name"
+                      placeholder="Doe"
+                    />
                   </div>
                 </div>
                 <br />
@@ -205,7 +291,8 @@ function SignUp() {
                   You are joining as?
                 </label>
                 <br />
-                <Select
+                {/* <Select onChange={handleOccupation}
+                  value={occupation}
                   styles={{
                     control: (baseStyles, state) => ({
                       ...baseStyles,
@@ -216,7 +303,14 @@ function SignUp() {
                     }),
                   }}
                   className="w-[106%] mt-[12px]  outline-none text-[16px] placeholder:text-[#212529] text-[#212529] rounded-[8px]    "
-                  options={options}
+                  options={optionValues}
+                /> */}
+                <input
+                  onChange={handleOccupation}
+                  value={occupation}
+                  className="w-[106%] mt-[12px] mb-[24px] pl-[15px] outline-none text-[16px] placeholder:text-[#212529] text-[#212529] rounded-[8px] h-[56px] border-[1px] border-[#CED4DA] "
+                  type="text"
+                  placeholder="e.g Reader"
                 />
                 <br />
                 <label className=" font-[400] text-[16px] text-[#3B3B3B] " htmlFor="email">
@@ -224,7 +318,13 @@ function SignUp() {
                 </label>
                 <br />
 
-                <input className="w-[106%] mt-[12px] mb-[24px] pl-[15px] outline-none text-[16px] placeholder:text-[#212529] text-[#212529] rounded-[8px] h-[56px] border-[1px] border-[#CED4DA] " type="email" placeholder="Johndoe@gmail.com" />
+                <input
+                  onChange={handleEmail}
+                  value={email}
+                  className="w-[106%] mt-[12px] mb-[24px] pl-[15px] outline-none text-[16px] placeholder:text-[#212529] text-[#212529] rounded-[8px] h-[56px] border-[1px] border-[#CED4DA] "
+                  type="email"
+                  placeholder="Johndoe@gmail.com"
+                />
                 <br />
 
                 <label className=" font-[400] text-[16px] text-[#3B3B3B] " htmlFor="email">
@@ -256,7 +356,13 @@ function SignUp() {
                 </label>
                 <br />
                 <div className="w-[106%] flex mt-[12px] justify-between items-center  pr-[15px] rounded-[8px] h-[56px] border-[1px] border-[#CED4DA]">
-                  <input className=" pl-[15px]  outline-none w-[95%] h-[45px] text-[16px] placeholder:text-[#212529] text-[#212529] " type={confirmPassword === true ? "text" : "password"} placeholder="********" />
+                  <input
+                    onChange={handlePassword}
+                    value={password}
+                    className=" pl-[15px]  outline-none w-[95%] h-[45px] text-[16px] placeholder:text-[#212529] text-[#212529] "
+                    type={confirmPassword === true ? "text" : "password"}
+                    placeholder="********"
+                  />
                   <button onClick={() => setConfirmPassword((open) => !open)} type="button">
                     {confirmPassword === true ? (
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -275,7 +381,7 @@ function SignUp() {
                 </div>
                 <br />
                 <br />
-                <Link onClick={() => window.scrollTo(0, 0)} className=" " to="/otp">
+                <Link onClick={handleSendClick} className=" " to="">
                   <div className=" text-[#fff] text-[18px] font-[600] pt-[12px] bg-[#543EE0] rounded-[8px] w-[106%] h-[56px] text-center ">Create account</div>
                 </Link>
                 <br />

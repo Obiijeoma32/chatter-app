@@ -1,7 +1,85 @@
+import { Link, useNavigate } from "react-router-dom";
 import SideBar from "./SideBar";
 import profile from "./feedprofile.png";
+import { ChangeEvent, useEffect, useState } from "react";
 
 function PostContent() {
+  const [post, setPost] = useState(false);
+  const [message, setMessage] = useState("");
+  const [title, setTitle] = useState("");
+  const [fullName, setFullName] = useState("");
+  const navigate = useNavigate();
+  const [information, setInformation] = useState({});
+  const [occupation, setOccupation] = useState("");
+  const userId = localStorage.getItem("userId"); // Retrieve the id from localStorage
+  console.log(userId);
+  function handleTitle(event: ChangeEvent<HTMLInputElement>) {
+    setTitle(event.target.value);
+  }
+  function handleMessage(event: ChangeEvent<HTMLInputElement>) {
+    setMessage(event.target.value);
+    setPost(true);
+  }
+  useEffect(() => {
+    fetch(`http://nubeero-deployment-server.uksouth.cloudapp.azure.com:9909/api/user/${userId}`)
+      .then((response) => response.json())
+      .then((data) => {
+        //  console.log(data);
+        setInformation(data);
+        setOccupation(data.occupation);
+        setFullName(data.firstName + " " + data.lastName);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  }, [userId]);
+
+  console.log(fullName);
+  console.log(information);
+  console.log(occupation);
+  const handleSendPost = async () => {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        postId: 200,
+        image: "demoData",
+        message: message,
+        date: new Date().toLocaleTimeString(),
+        likeCounter: 1,
+        commentCount: "demoData",
+        title: title,
+        fullName: fullName,
+        occupation: occupation,
+      }),
+    };
+
+    console.log(requestOptions);
+    // setLoading(true); // start progress spinner
+    fetch("http://nubeero-deployment-server.uksouth.cloudapp.azure.com:9909/api/user/createPost", requestOptions)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        console.log(data.id);
+
+        if (data.postId !== null) {
+          // localStorage.setItem("userId", data.id); // Save the id to localStorage
+
+          // const redirectUrl = `/resourcedetails`;
+
+          navigate("/feeds");
+
+          // window.location.href = redirectUrl; // Redirect to "/resourcedetails" page
+          // setLinkTo(redirectUrl);
+          console.log("this should go to the next page");
+        }
+      });
+
+    // .catch((err) => {
+    //   console.log(err.message);
+
+    // });
+  };
   return (
     <>
       <SideBar />
@@ -27,6 +105,36 @@ function PostContent() {
                 />
               </svg>
               <img className=" rounded-[50%]" src={profile} alt="user" />
+            </div>
+          </div>
+        </div>
+        <div>
+          <div className="w-[80%] mt-[5%] flex justify-end">
+            <Link onClick={handleSendPost} to="">
+              <div
+                className={
+                  post
+                    ? "bg-[#543EE0] text-[#fff] text-[18px] font-[600] pt-[12px]  rounded-[8px] w-[145px] h-[56px] text-center"
+                    : "bg-[#543EE0] bg-opacity-50 text-[#fff] text-[18px] font-[600] pt-[12px]  rounded-[8px] w-[145px] h-[56px] text-center"
+                }
+              >
+                Publish
+              </div>
+            </Link>
+          </div>
+          <div>
+            <div>
+              <div className="ml-[76px] mt-[41px] flex justify-between items-center w-[65%]">
+                <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="30" cy="30" r="29.5" fill="white" stroke="#D0D0D0" />
+                  <path d="M41.0525 31.6214H31.5788V41.3511H28.4209V31.6214H18.9473V28.3782H28.4209V18.6484H31.5788V28.3782H41.0525V31.6214Z" fill="#626262" />
+                </svg>
+                <div>
+                  <input onChange={handleTitle} value={title} className="text-[48px] outline-none pl-[5px] placeholder:text-[48px] border-none placeholder:text-[#D0D0D0] text-[#D0D0D0] font-[600] " placeholder="Title" type="text" />
+                  <br />
+                  <input onChange={handleMessage} value={message} className="text-[32px] outline-none pl-[5px] placeholder:text-[32px] border-none placeholder:text-[#D0D0D0] mt-[10px] text-[#D0D0D0]" placeholder="Write a post............." />
+                </div>
+              </div>
             </div>
           </div>
         </div>
