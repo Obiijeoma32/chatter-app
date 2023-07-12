@@ -18,12 +18,13 @@ function Feeds() {
   const userId = localStorage.getItem("userId"); // Retrieve the id from localStorage
   console.log(userId);
 
-  interface Post {
-    fullName: string;
-    occupation: string;
-    title: string;
-    message: string;
-  }
+  // interface Post {
+  //   fullName: string;
+  //   occupation: string;
+  //   title: string;
+  //   message: string;
+  // }
+  // console.log()
   useEffect(() => {
     fetch(`http://nubeero-deployment-server.uksouth.cloudapp.azure.com:9909/api/user/${userId}`)
       .then((response) => response.json())
